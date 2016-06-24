@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="wheel_view">
+        <attr name="background_color" format="color"></attr>
+        <attr name="divider_width" format="integer"></attr>
+    </declare-styleable>
+</resources>
