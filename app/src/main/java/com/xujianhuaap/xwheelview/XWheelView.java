@@ -64,6 +64,8 @@ public class XWheelView extends LinearLayout{
         //绘制背景
         canvas.drawColor(backGroundColor);
         LogUtil.d(TAG,"-------onDraw-----");
+
+
     }
 
     @Override
