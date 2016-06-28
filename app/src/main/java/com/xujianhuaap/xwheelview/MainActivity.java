@@ -1,5 +1,6 @@
 package com.xujianhuaap.xwheelview;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         wheelView.addView(tv2,layoutParams);
         wheelView.addView(tv3,layoutParams);
 
-
+        startActivity(new Intent(this,FirstActivity.class));
     }
 
     @Override
