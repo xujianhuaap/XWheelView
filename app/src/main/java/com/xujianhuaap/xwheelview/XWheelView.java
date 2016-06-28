@@ -23,6 +23,11 @@ public class XWheelView extends LinearLayout{
     public  int FIRST_LINE_Y=0;
     public  int SECOND_LINE_Y=0;
     public  int THIRD_LINE_Y=0;
+    public int STANDARD_DIMEN=0;
+    public int FIRST_RECT_COLOR;
+    public int SECOND_RECT_COLOR;
+    public int THIRD_RECT_COLOR;
+    public int FOURTH_RECT_COLOR;
     private int backGroundColor;
     private float totalLen;
     private float initY=0;
@@ -52,6 +57,10 @@ public class XWheelView extends LinearLayout{
             backGroundColor=typedArray.getColor(R.styleable.wheel_view_background_color,0);
             LogUtil.d(TAG,"dividerWidth"+dividerWidth);
         }
+        FIRST_RECT_COLOR=context.getResources().getColor(R.color.color_first_rect);
+        SECOND_RECT_COLOR=context.getResources().getColor(R.color.color_second_rect);
+        THIRD_RECT_COLOR=context.getResources().getColor(R.color.color_third_rect);
+        FOURTH_RECT_COLOR=context.getResources().getColor(R.color.color_fourth_rect);
         density=context.getResources().getDisplayMetrics().density;
     }
 
@@ -61,9 +70,10 @@ public class XWheelView extends LinearLayout{
         Paint paint=new Paint();
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(10);
-        FIRST_LINE_Y=(1*viewHeight)/4;
-        SECOND_LINE_Y=(2*viewHeight)/4;
-        THIRD_LINE_Y=(3*viewHeight)/4;
+        STANDARD_DIMEN=(1*viewHeight)/4;
+        FIRST_LINE_Y=STANDARD_DIMEN;
+        SECOND_LINE_Y=STANDARD_DIMEN*2;
+        THIRD_LINE_Y=STANDARD_DIMEN*3;
         //三条分割线
         canvas.drawLine(0,FIRST_LINE_Y,600,FIRST_LINE_Y,paint);
         canvas.drawLine(0,SECOND_LINE_Y,600,SECOND_LINE_Y,paint);
@@ -126,8 +136,23 @@ public class XWheelView extends LinearLayout{
         return false;
     }
     public void scroll(){
+        int dividerY=(int)(totalLen%STANDARD_DIMEN);
+        int position=(int)(totalLen/STANDARD_DIMEN);
         for(int i=0;i<getChildCount();i++){
-            getChildAt(i).setTranslationY((totalLen));
+            View view=getChildAt(i);
+            ItemView itemView=(ItemView)view;
+            itemView.setTranslationY((totalLen));
+
+            if(position+i==0){
+                itemView.restoreView(FIRST_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
+            }else if(position+i==1){
+                itemView.restoreView(SECOND_RECT_COLOR,THIRD_RECT_COLOR,dividerY);
+            }else if(position+i==2){
+                itemView.restoreView(THIRD_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
+            }else if(position+i==3){
+                itemView.restoreView(FOURTH_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
+            }
+
         }
     }
 

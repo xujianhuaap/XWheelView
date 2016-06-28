@@ -7,4 +7,10 @@
     <color name="color_green">#00ff00</color>
     <color name="color_orange">#fde001</color>
     <color name="bg_color_default">#22fde001</color>
+
+    <color name="color_first_rect">#25fdbb01</color>
+    <color name="color_second_rect">#2500fd13</color>
+    <color name="color_third_rect">#25983301</color>
+    <color name="color_fourth_rect">#250011fd</color>
+
 </resources>
