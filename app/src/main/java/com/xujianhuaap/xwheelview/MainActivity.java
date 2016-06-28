@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         wheelView.addView(tv1,layoutParams);
         wheelView.addView(tv2,layoutParams);
         wheelView.addView(tv3,layoutParams);
-
-        startActivity(new Intent(this,FirstActivity.class));
     }
 
     @Override

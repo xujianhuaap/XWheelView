@@ -15,10 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".FirstActivity" android:label="First"></activity>
-        <activity android:name=".SecondActivity" android:launchMode="standard" android:label="Second"></activity>
-        <activity android:name=".ThirdActivity" android:launchMode="standard" android:label="Third"></activity>
     </application>
 
 </manifest>
