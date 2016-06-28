@@ -13,6 +13,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private XWheelView wheelView;
+    private float density;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         tv2.setText("222222222");
         TextView tv3=new ItemView(MainActivity.this);
         tv3.setText("333333333");
-        ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100);
+        density =getResources().getDisplayMetrics().density;
+        ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(100*density));
         wheelView.addView(tv1,layoutParams);
         wheelView.addView(tv2,layoutParams);
         wheelView.addView(tv3,layoutParams);

@@ -6,9 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.xujianhuaap.xwheelview.util.LogUtil;
+
+import java.util.ArrayList;
 
 /**
  * Created by xujianhua on 2016/6/23.
@@ -20,25 +24,35 @@ public class XWheelView extends LinearLayout{
     public  int SECOND_LINE_Y=0;
     public  int THIRD_LINE_Y=0;
     private int backGroundColor;
+    private float totalLen;
+    private float initY=0;
+    private float density=0;
+    private int viewWidth;
+    private int viewHeight;
 
     public XWheelView(Context context) {
         super(context);
+        init(context,null);
     }
 
     public XWheelView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray typedArray=context.getTheme().obtainStyledAttributes(attrs,R.styleable.wheel_view,0,0);
-        float dividerWidth=typedArray.getInteger(R.styleable.wheel_view_divider_width,0);
-        backGroundColor = typedArray.getColor(R.styleable.wheel_view_background_color,0);
-        LogUtil.d(TAG,"dividerWidth \t"+dividerWidth);
+        init(context,attrs);
     }
 
     public XWheelView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray typedArray=context.getTheme().obtainStyledAttributes(R.styleable.wheel_view);
-        float dividerWidth=typedArray.getInteger(R.styleable.wheel_view_divider_width,0);
-        LogUtil.d(TAG,"dividerWidth"+dividerWidth);
+        init(context,attrs);
 
+    }
+    private void init(Context context,AttributeSet attrs) {
+        if(attrs!=null){
+            TypedArray typedArray=context.obtainStyledAttributes(attrs,R.styleable.wheel_view);
+            float dividerWidth=typedArray.getInteger(R.styleable.wheel_view_divider_width,0);
+            backGroundColor=typedArray.getColor(R.styleable.wheel_view_background_color,0);
+            LogUtil.d(TAG,"dividerWidth"+dividerWidth);
+        }
+        density=context.getResources().getDisplayMetrics().density;
     }
 
     @Override
@@ -47,13 +61,13 @@ public class XWheelView extends LinearLayout{
         Paint paint=new Paint();
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(10);
-        FIRST_LINE_Y=100;
-        SECOND_LINE_Y=200;
-        THIRD_LINE_Y=300;
+        FIRST_LINE_Y=(1*viewHeight)/4;
+        SECOND_LINE_Y=(2*viewHeight)/4;
+        THIRD_LINE_Y=(3*viewHeight)/4;
         //三条分割线
-        canvas.drawLine(0,FIRST_LINE_Y,300,FIRST_LINE_Y,paint);
-        canvas.drawLine(0,SECOND_LINE_Y,300,SECOND_LINE_Y,paint);
-        canvas.drawLine(0,THIRD_LINE_Y,300,THIRD_LINE_Y,paint);
+        canvas.drawLine(0,FIRST_LINE_Y,600,FIRST_LINE_Y,paint);
+        canvas.drawLine(0,SECOND_LINE_Y,600,SECOND_LINE_Y,paint);
+        canvas.drawLine(0,THIRD_LINE_Y,600,THIRD_LINE_Y,paint);
 //        画弧线
 //        int l=THIRD_LINE_Y-SECOND_LINE_Y;
 //        double radius=l/Math.PI;
@@ -74,10 +88,63 @@ public class XWheelView extends LinearLayout{
         LogUtil.d(TAG,"-------onMeasure-----");
     }
 
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        LogUtil.d(TAG,"-------onLayout isChange-----"+changed);
+        if(changed){
+            viewWidth=r-l;
+            viewHeight=b-t;
+        }
+    }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         LogUtil.d(TAG,"-------onScrollChanged-----"+l);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        switch (event.getAction()){
+            case MotionEvent.ACTION_MOVE:
+                LogUtil.d(TAG,"-------onTouchEvent move-----");
+                totalLen+=event.getY()-initY;
+                initY=event.getY();
+                scroll();
+                return true;
+            case MotionEvent.ACTION_UP:
+                LogUtil.d(TAG,"-------onTouchEvent up-----");
+                break;
+            case MotionEvent.ACTION_DOWN:
+                LogUtil.d(TAG,"-------onTouchEvent down-----");
+                initY=event.getY();
+                return true;
+            default:
+                break;
+        }
+        return false;
+    }
+    public void scroll(){
+        for(int i=0;i<getChildCount();i++){
+            getChildAt(i).setTranslationY((totalLen));
+        }
+    }
+
+    /***
+     *
+     * @param position
+     */
+    public void refreshView(int position){
+        if(position==0){
+
+        }else  if(position==1){
+
+        }else  if(position==2){
+
+        }else if(position==3){
+
+        }
     }
 
 
