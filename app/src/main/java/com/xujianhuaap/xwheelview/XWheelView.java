@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.xujianhuaap.xwheelview.util.LogUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xujianhua on 2016/6/23.
@@ -30,10 +31,13 @@ public class XWheelView extends LinearLayout{
     public int FOURTH_RECT_COLOR;
     private int backGroundColor;
     private float totalLen;
+    private float lasteTotalLen;
     private float initY=0;
     private float density=0;
     private int viewWidth;
     private int viewHeight;
+
+    private List<ItemView> itemViews=new ArrayList<>();
 
     public XWheelView(Context context) {
         super(context);
@@ -56,6 +60,7 @@ public class XWheelView extends LinearLayout{
             float dividerWidth=typedArray.getInteger(R.styleable.wheel_view_divider_width,0);
             backGroundColor=typedArray.getColor(R.styleable.wheel_view_background_color,0);
             LogUtil.d(TAG,"dividerWidth"+dividerWidth);
+            typedArray.recycle();//必不可少
         }
         FIRST_RECT_COLOR=context.getResources().getColor(R.color.color_first_rect);
         SECOND_RECT_COLOR=context.getResources().getColor(R.color.color_second_rect);
@@ -105,6 +110,14 @@ public class XWheelView extends LinearLayout{
         if(changed){
             viewWidth=r-l;
             viewHeight=b-t;
+            itemViews.clear();
+            for(int i=0;i<getChildCount();i++){
+                View view=getChildAt(i);
+                ItemView itemView=(ItemView)view;
+                itemViews.add(i,itemView);
+            }
+            LogUtil.d(TAG,"onLayout viewTop"+t);
+            LogUtil.d(TAG,"onLayout viewBottom"+b);
         }
     }
 
@@ -121,7 +134,10 @@ public class XWheelView extends LinearLayout{
                 LogUtil.d(TAG,"-------onTouchEvent move-----");
                 totalLen+=event.getY()-initY;
                 initY=event.getY();
-                scroll();
+                if(Math.abs(totalLen-lasteTotalLen)>50){
+                    lasteTotalLen=totalLen;
+                    scroll();
+                }
                 return true;
             case MotionEvent.ACTION_UP:
                 LogUtil.d(TAG,"-------onTouchEvent up-----");
@@ -138,21 +154,11 @@ public class XWheelView extends LinearLayout{
     public void scroll(){
         int dividerY=(int)(totalLen%STANDARD_DIMEN);
         int position=(int)(totalLen/STANDARD_DIMEN);
-        for(int i=0;i<getChildCount();i++){
-            View view=getChildAt(i);
-            ItemView itemView=(ItemView)view;
+        for(int i=0;i<itemViews.size();i++){
+            ItemView itemView=itemViews.get(i);
             itemView.setTranslationY((totalLen));
-
-            if(position+i==0){
-                itemView.restoreView(FIRST_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
-            }else if(position+i==1){
-                itemView.restoreView(SECOND_RECT_COLOR,THIRD_RECT_COLOR,dividerY);
-            }else if(position+i==2){
-                itemView.restoreView(THIRD_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
-            }else if(position+i==3){
-                itemView.restoreView(FOURTH_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
-            }
-
+            LogUtil.d(TAG,"-------scroll i-----"+i);
+            refreshView(itemView,position+i,dividerY);
         }
     }
 
@@ -160,15 +166,17 @@ public class XWheelView extends LinearLayout{
      *
      * @param position
      */
-    public void refreshView(int position){
+    public void refreshView(ItemView itemView,int position,int dividerY){
         if(position==0){
-
+            itemView.restoreView(FIRST_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
         }else  if(position==1){
-
+            itemView.restoreView(SECOND_RECT_COLOR,THIRD_RECT_COLOR,dividerY);
         }else  if(position==2){
-
+            itemView.restoreView(THIRD_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
         }else if(position==3){
-
+            itemView.restoreView(FOURTH_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
+        }else {
+            itemView.restoreView(FOURTH_RECT_COLOR,Color.GREEN,dividerY);
         }
     }
 

@@ -3,10 +3,13 @@ package com.xujianhuaap.xwheelview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.xujianhuaap.xwheelview.util.LogUtil;
 
 /**
  * Created by xujianhua on 2016/6/24.
@@ -19,6 +22,9 @@ public class ItemView extends TextView{
     private int viewRight;
     private int viewBottom;
     private int viewLeft;
+    private int viewHeight;
+
+    private String TAG=ItemView.class.getName();
 
     public ItemView(Context context) {
         super(context,null,0,R.style.WheelViewItemTheme);
@@ -31,8 +37,22 @@ public class ItemView extends TextView{
             viewTop=top;
             viewLeft=left;
             viewRight=right;
-            viewBottom=right;
+            viewBottom=bottom;
+            viewHeight=viewBottom-viewTop;
+            LogUtil.d(TAG,"onLayout viewTop"+viewTop);
+            LogUtil.d(TAG,"onLayout viewBottom"+viewBottom);
         }
+    }
+
+    @Override
+    protected void onScrollChanged(int horiz, int vert, int oldHoriz, int oldVert) {
+        super.onScrollChanged(horiz, vert, oldHoriz, oldVert);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
     }
 
     @Override
@@ -40,14 +60,16 @@ public class ItemView extends TextView{
         super.onDraw(canvas);
         Paint paint=new Paint();
         //绘制
-        
         paint.setColor(upRectColor);
-        Rect topRect=new Rect(viewLeft,viewTop,viewRight,dividerY);
+        int lineY=viewTop+viewHeight-dividerY;
+        Rect topRect=new Rect(viewLeft,viewTop,viewRight,lineY);
         canvas.drawRect(topRect,paint);
 
+        paint.reset();
         paint.setColor(downRectColor);
-        Rect bottomRect=new Rect(viewLeft,dividerY,viewRight,viewBottom);
+        Rect bottomRect=new Rect(viewLeft,lineY,viewRight,viewBottom);
         canvas.drawRect(bottomRect,paint);
+        LogUtil.d(TAG,"onDraw dividerY \t"+dividerY+"lineY\t"+(lineY));
 
     }
 
