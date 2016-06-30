@@ -23,11 +23,14 @@ public class ItemView extends TextView{
     private int viewBottom;
     private int viewLeft;
     private int viewHeight;
+    private int id;
 
     private String TAG=ItemView.class.getName();
+    private Canvas canvas;
 
-    public ItemView(Context context) {
+    public ItemView(Context context,int id) {
         super(context,null,0,R.style.WheelViewItemTheme);
+        this.id=id;
     }
 
     @Override
@@ -58,18 +61,19 @@ public class ItemView extends TextView{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        this.canvas=canvas;
         Paint paint=new Paint();
         //绘制
         paint.setColor(upRectColor);
-        int lineY=viewTop+viewHeight-dividerY;
-        Rect topRect=new Rect(viewLeft,viewTop,viewRight,lineY);
+        int lineY=viewHeight-dividerY;
+        Rect topRect=new Rect(viewLeft,0,viewRight,lineY);
         canvas.drawRect(topRect,paint);
 
         paint.reset();
         paint.setColor(downRectColor);
         Rect bottomRect=new Rect(viewLeft,lineY,viewRight,viewBottom);
         canvas.drawRect(bottomRect,paint);
-        LogUtil.d(TAG,"onDraw dividerY \t"+dividerY+"lineY\t"+(lineY));
+        LogUtil.d(TAG,"id \t"+id+"\tonDraw viewTop \t"+viewTop+"\tlineY\t"+(lineY));
 
     }
 

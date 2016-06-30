@@ -14,6 +14,7 @@ import com.xujianhuaap.xwheelview.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by xujianhua on 2016/6/23.
@@ -116,7 +117,8 @@ public class XWheelView extends LinearLayout{
                 ItemView itemView=(ItemView)view;
                 itemViews.add(i,itemView);
             }
-            LogUtil.d(TAG,"onLayout viewTop"+t);
+
+            LogUtil.d(TAG,"onLayout viewTop"+TimeUnit.SECONDS.toMillis(30));
             LogUtil.d(TAG,"onLayout viewBottom"+b);
         }
     }
@@ -134,7 +136,7 @@ public class XWheelView extends LinearLayout{
                 LogUtil.d(TAG,"-------onTouchEvent move-----");
                 totalLen+=event.getY()-initY;
                 initY=event.getY();
-                if(Math.abs(totalLen-lasteTotalLen)>50){
+                if(Math.abs(totalLen-lasteTotalLen)>60){
                     lasteTotalLen=totalLen;
                     scroll();
                 }
@@ -157,8 +159,8 @@ public class XWheelView extends LinearLayout{
         for(int i=0;i<itemViews.size();i++){
             ItemView itemView=itemViews.get(i);
             itemView.setTranslationY((totalLen));
-            LogUtil.d(TAG,"-------scroll i-----"+i);
             refreshView(itemView,position+i,dividerY);
+            LogUtil.d(TAG,"-------scroll i-----"+i);
         }
     }
 
@@ -167,6 +169,7 @@ public class XWheelView extends LinearLayout{
      * @param position
      */
     public void refreshView(ItemView itemView,int position,int dividerY){
+        LogUtil.d(TAG,"refreshView");
         if(position==0){
             itemView.restoreView(FIRST_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
         }else  if(position==1){

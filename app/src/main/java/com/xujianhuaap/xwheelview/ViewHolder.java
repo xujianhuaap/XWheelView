@@ -15,7 +15,7 @@ public class ViewHolder {
     public View getView(int index) {
         View view=views.get(index);
         if(view==null){
-            view=new ItemView(context);
+            view=new ItemView(context,0);
             views.add(index,view);
         }
         return view;

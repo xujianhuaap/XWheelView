@@ -21,17 +21,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         wheelView = (XWheelView) findViewById(R.id.wheel_view);
-        TextView tv1=new ItemView(MainActivity.this);
+        TextView tv1=new ItemView(MainActivity.this,0);
         tv1.setText("111111111");
-        TextView tv2=new ItemView(MainActivity.this);
+        TextView tv2=new ItemView(MainActivity.this,1);
         tv2.setText("222222222");
-        TextView tv3=new ItemView(MainActivity.this);
+        TextView tv3=new ItemView(MainActivity.this,2);
         tv3.setText("333333333");
         density =getResources().getDisplayMetrics().density;
         ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(100*density));
-        wheelView.addView(tv1,layoutParams);
-        wheelView.addView(tv2,layoutParams);
-        wheelView.addView(tv3,layoutParams);
+        wheelView.addView(tv1,0,layoutParams);
+        wheelView.addView(tv2,1,layoutParams);
+        wheelView.addView(tv3,2,layoutParams);
     }
 
     @Override
