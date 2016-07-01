@@ -8,7 +8,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xujianhuaap.xwheelview.util.LogUtil;
 
@@ -37,8 +39,12 @@ public class XWheelView extends LinearLayout{
     private float density=0;
     private int viewWidth;
     private int viewHeight;
+    private Context context;
+    private boolean isDown;
 
     private List<ItemView> itemViews=new ArrayList<>();
+    private int position;//
+    private int lastPosition;
 
     public XWheelView(Context context) {
         super(context);
@@ -56,6 +62,7 @@ public class XWheelView extends LinearLayout{
 
     }
     private void init(Context context,AttributeSet attrs) {
+        this.context=context;
         if(attrs!=null){
             TypedArray typedArray=context.obtainStyledAttributes(attrs,R.styleable.wheel_view);
             float dividerWidth=typedArray.getInteger(R.styleable.wheel_view_divider_width,0);
@@ -81,9 +88,9 @@ public class XWheelView extends LinearLayout{
         SECOND_LINE_Y=STANDARD_DIMEN*2;
         THIRD_LINE_Y=STANDARD_DIMEN*3;
         //三条分割线
-        canvas.drawLine(0,FIRST_LINE_Y,600,FIRST_LINE_Y,paint);
-        canvas.drawLine(0,SECOND_LINE_Y,600,SECOND_LINE_Y,paint);
-        canvas.drawLine(0,THIRD_LINE_Y,600,THIRD_LINE_Y,paint);
+        canvas.drawLine(0,FIRST_LINE_Y,viewWidth,FIRST_LINE_Y,paint);
+        canvas.drawLine(0,SECOND_LINE_Y,viewWidth,SECOND_LINE_Y,paint);
+        canvas.drawLine(0,THIRD_LINE_Y,viewWidth,THIRD_LINE_Y,paint);
 //        画弧线
 //        int l=THIRD_LINE_Y-SECOND_LINE_Y;
 //        double radius=l/Math.PI;
@@ -155,12 +162,34 @@ public class XWheelView extends LinearLayout{
     }
     public void scroll(){
         int dividerY=(int)(totalLen%STANDARD_DIMEN);
-        int position=(int)(totalLen/STANDARD_DIMEN);
+        position = (int)(totalLen/STANDARD_DIMEN);
         for(int i=0;i<itemViews.size();i++){
             ItemView itemView=itemViews.get(i);
             itemView.setTranslationY((totalLen));
-            refreshView(itemView,position+i,dividerY);
+            refreshView(itemView, position +i,dividerY);
             LogUtil.d(TAG,"-------scroll i-----"+i);
+        }
+        if(position-lastPosition==1){
+            ItemView tv0=new ItemView(context,0);
+            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(100*density));
+            tv0.setText("xxxxx");
+            removeItemViewFormQueue(itemViews.size()-1);
+            itemViews.remove(itemViews.size()-1);
+            addQueue(tv0,layoutParams,0);
+            itemViews.add(0,tv0);
+            tv0.setTranslationY(totalLen-STANDARD_DIMEN);
+            lastPosition=position;
+        } else if(position-lastPosition==-1){
+            ItemView tv0=new ItemView(context,0);
+            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(100*density));
+//            layoutParams.bottomMargin=(int)totalLen;
+            tv0.setText("yyyyyy");
+            removeItemViewFormQueue(0);
+            itemViews.remove(0);
+            addQueue(tv0,layoutParams,itemViews.size());
+            itemViews.add(itemViews.size(),tv0);
+            lastPosition=position;
+
         }
     }
 
@@ -170,6 +199,7 @@ public class XWheelView extends LinearLayout{
      */
     public void refreshView(ItemView itemView,int position,int dividerY){
         LogUtil.d(TAG,"refreshView");
+        position=position%4;
         if(position==0){
             itemView.restoreView(FIRST_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
         }else  if(position==1){
@@ -177,10 +207,16 @@ public class XWheelView extends LinearLayout{
         }else  if(position==2){
             itemView.restoreView(THIRD_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
         }else if(position==3){
-            itemView.restoreView(FOURTH_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
+            itemView.restoreView(FOURTH_RECT_COLOR,FIRST_RECT_COLOR,dividerY);
         }else {
             itemView.restoreView(FOURTH_RECT_COLOR,Color.GREEN,dividerY);
         }
+    }
+    public void addQueue(TextView itemView,ViewGroup.LayoutParams layoutParams,int index){
+        addView(itemView,index,layoutParams);
+    }
+    public void removeItemViewFormQueue(int index){
+        removeViewAt(index);
     }
 
 

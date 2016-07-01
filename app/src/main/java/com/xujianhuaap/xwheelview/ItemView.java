@@ -26,7 +26,6 @@ public class ItemView extends TextView{
     private int id;
 
     private String TAG=ItemView.class.getName();
-    private Canvas canvas;
 
     public ItemView(Context context,int id) {
         super(context,null,0,R.style.WheelViewItemTheme);
@@ -61,7 +60,6 @@ public class ItemView extends TextView{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        this.canvas=canvas;
         Paint paint=new Paint();
         //绘制
         paint.setColor(upRectColor);
