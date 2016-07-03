@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         wheelView.addView(tv2,2,layoutParams);
         wheelView.addView(tv3,3,layoutParams);
         wheelView.addView(tv4,4,layoutParams);
-        wheelView.addView(tv5,5,layoutParams);
+//        wheelView.addView(tv5,5,layoutParams);
     }
 
     @Override

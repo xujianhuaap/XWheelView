@@ -122,6 +122,12 @@ public class XWheelView extends LinearLayout{
             for(int i=0;i<getChildCount();i++){
                 View view=getChildAt(i);
                 ItemView itemView=(ItemView)view;
+                if(i==0){
+                    LinearLayout.LayoutParams layoutParams=(LayoutParams) itemView.getLayoutParams();
+                    layoutParams.topMargin=-STANDARD_DIMEN;
+                    itemView.setLayoutParams(layoutParams);
+                    requestLayout();
+                }
                 itemViews.add(i,itemView);
             }
 
@@ -165,32 +171,18 @@ public class XWheelView extends LinearLayout{
         position = (int)(totalLen/STANDARD_DIMEN);
         for(int i=0;i<itemViews.size();i++){
             ItemView itemView=itemViews.get(i);
-            itemView.setTranslationY((totalLen));
+            if(itemViews.size()-1==i){
+                itemView.setTranslationY((dividerY-5*STANDARD_DIMEN));
+            }else {
+                itemView.setTranslationY((dividerY));
+            }
+            if(position-lastPosition==1){
+
+            }
             refreshView(itemView, position +i,dividerY);
             LogUtil.d(TAG,"-------scroll i-----"+i);
         }
-        if(position-lastPosition==1){
-            ItemView tv0=new ItemView(context,0);
-            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(100*density));
-            tv0.setText("xxxxx");
-            removeItemViewFormQueue(itemViews.size()-1);
-            itemViews.remove(itemViews.size()-1);
-            addQueue(tv0,layoutParams,0);
-            itemViews.add(0,tv0);
-            tv0.setTranslationY(totalLen-STANDARD_DIMEN);
-            lastPosition=position;
-        } else if(position-lastPosition==-1){
-            ItemView tv0=new ItemView(context,0);
-            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(100*density));
-//            layoutParams.bottomMargin=(int)totalLen;
-            tv0.setText("yyyyyy");
-            removeItemViewFormQueue(0);
-            itemViews.remove(0);
-            addQueue(tv0,layoutParams,itemViews.size());
-            itemViews.add(itemViews.size(),tv0);
-            lastPosition=position;
 
-        }
     }
 
     /***

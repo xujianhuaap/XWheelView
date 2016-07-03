@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:orientation="vertical"
-        android:paddingTop="-100dp"
         app:divider_width="10"
         app:background_color="@color/bg_color_default">
     </com.xujianhuaap.xwheelview.XWheelView>
