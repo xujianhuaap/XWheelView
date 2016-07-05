@@ -83,21 +83,14 @@ public class XWheelView extends LinearLayout{
         Paint paint=new Paint();
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(10);
-        STANDARD_DIMEN=(1*viewHeight)/4;
+        STANDARD_DIMEN=(1*viewHeight)/3;
         FIRST_LINE_Y=STANDARD_DIMEN;
         SECOND_LINE_Y=STANDARD_DIMEN*2;
         THIRD_LINE_Y=STANDARD_DIMEN*3;
         //三条分割线
         canvas.drawLine(0,FIRST_LINE_Y,viewWidth,FIRST_LINE_Y,paint);
         canvas.drawLine(0,SECOND_LINE_Y,viewWidth,SECOND_LINE_Y,paint);
-        canvas.drawLine(0,THIRD_LINE_Y,viewWidth,THIRD_LINE_Y,paint);
-//        画弧线
-//        int l=THIRD_LINE_Y-SECOND_LINE_Y;
-//        double radius=l/Math.PI;
-//        int xDot=100;
-//        int yDot=SECOND_LINE_Y;
-//
-//        paint.setColor(Color.GREEN);
+
         //绘制背景
         canvas.drawColor(backGroundColor);
         LogUtil.d(TAG,"-------onDraw-----");
@@ -149,7 +142,12 @@ public class XWheelView extends LinearLayout{
                 LogUtil.d(TAG,"-------onTouchEvent move-----");
                 totalLen+=event.getY()-initY;
                 initY=event.getY();
-                if(Math.abs(totalLen-lasteTotalLen)>60){
+                if(Math.abs(totalLen-lasteTotalLen)>0){
+                    if(totalLen-lasteTotalLen>0){
+                        isDown=true;
+                    }else {
+                        isDown=false;
+                    }
                     lasteTotalLen=totalLen;
                     scroll();
                 }
@@ -172,14 +170,13 @@ public class XWheelView extends LinearLayout{
         for(int i=0;i<itemViews.size();i++){
             ItemView itemView=itemViews.get(i);
             if(itemViews.size()-1==i){
-                itemView.setTranslationY((dividerY-5*STANDARD_DIMEN));
+                itemView.setTranslationY((dividerY-4*STANDARD_DIMEN));
             }else {
                 itemView.setTranslationY((dividerY));
             }
-            if(position-lastPosition==1){
-
-            }
             refreshView(itemView, position +i,dividerY);
+
+
             LogUtil.d(TAG,"-------scroll i-----"+i);
         }
 
@@ -193,23 +190,16 @@ public class XWheelView extends LinearLayout{
         LogUtil.d(TAG,"refreshView");
         position=position%4;
         if(position==0){
-            itemView.restoreView(FIRST_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
+            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY,position);
         }else  if(position==1){
-            itemView.restoreView(SECOND_RECT_COLOR,THIRD_RECT_COLOR,dividerY);
+            itemView.restoreView(SECOND_RECT_COLOR,SECOND_RECT_COLOR,dividerY,position);
         }else  if(position==2){
-            itemView.restoreView(THIRD_RECT_COLOR,FOURTH_RECT_COLOR,dividerY);
+            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY,position);
         }else if(position==3){
-            itemView.restoreView(FOURTH_RECT_COLOR,FIRST_RECT_COLOR,dividerY);
+            itemView.restoreView(SECOND_RECT_COLOR,SECOND_RECT_COLOR,dividerY,position);
         }else {
-            itemView.restoreView(FOURTH_RECT_COLOR,Color.GREEN,dividerY);
+            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY,position);
         }
     }
-    public void addQueue(TextView itemView,ViewGroup.LayoutParams layoutParams,int index){
-        addView(itemView,index,layoutParams);
-    }
-    public void removeItemViewFormQueue(int index){
-        removeViewAt(index);
-    }
-
 
 }

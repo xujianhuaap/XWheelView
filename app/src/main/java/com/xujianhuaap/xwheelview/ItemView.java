@@ -24,7 +24,6 @@ public class ItemView extends TextView{
     private int viewLeft;
     private int viewHeight;
     private int id;
-
     private String TAG=ItemView.class.getName();
 
     public ItemView(Context context,int id) {
@@ -71,14 +70,28 @@ public class ItemView extends TextView{
         paint.setColor(downRectColor);
         Rect bottomRect=new Rect(viewLeft,lineY,viewRight,viewBottom);
         canvas.drawRect(bottomRect,paint);
+
         LogUtil.d(TAG,"id \t"+id+"\tonDraw viewTop \t"+viewTop+"\tlineY\t"+(lineY));
 
     }
 
-    public void restoreView(int upRectColor,int downRectColor,int dividerY){
+    public void restoreView(int upRectColor,int downRectColor,int dividerY,int position){
         this.upRectColor=upRectColor;
         this.downRectColor=downRectColor;
         this.dividerY=dividerY;
+        refreshViewContent(position,dividerY);
         invalidate();
+    }
+
+    public void refreshViewContent(int position,int dividerY){
+        if(dividerY>viewHeight*990/1000){
+            this.setText(""+position);
+            if(id==1){
+                this.setTextSize(30);
+            }else {
+                this.setTextSize(20);
+            }
+        }
+
     }
 }

@@ -14,7 +14,7 @@
     <com.xujianhuaap.xwheelview.XWheelView
         android:id="@+id/wheel_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:orientation="vertical"
         app:divider_width="10"
         app:background_color="@color/bg_color_default">
