@@ -45,6 +45,7 @@ public class XWheelView extends LinearLayout{
     private List<ItemView> itemViews=new ArrayList<>();
     private int position;//
     private int lastPosition;
+    private WheelViewAdapter<String> adapter;
 
     public XWheelView(Context context) {
         super(context);
@@ -172,21 +173,24 @@ public class XWheelView extends LinearLayout{
             position=lastPosition;
             isNext=true;
         }
+//        int dataCount=adapter.getCount();
+//        int index=position/dataCount;
         for(int i=0;i<itemViews.size();i++){
             ItemView itemView=itemViews.get(i);
+            //滚动
             if(itemViews.size()-1==i){
                 itemView.setTranslationY((dividerY-4*STANDARD_DIMEN));
             }else {
                 itemView.setTranslationY((dividerY));
             }
+            //背景颜色
             if(isNext){
-                refreshView(itemView, position-1+i,dividerY);
+                itemView.restoreViewContent((4-position%4-1+i)%4);
+                refreshView(itemView, (4-position%4-1+i)%4,dividerY);
             }else {
-                refreshView(itemView, position +i,dividerY);
+                itemView.restoreViewContent((4-position%4+i)%4);
+                refreshView(itemView,(4-position%4+i)%4,dividerY);
             }
-
-
-
             LogUtil.d(TAG,"-------scroll i-----"+i);
         }
 
@@ -194,21 +198,15 @@ public class XWheelView extends LinearLayout{
 
     /***
      *
-     * @param position
+     * @param itemView
+     * @param index
+     * @param dividerY
      */
-    public void refreshView(ItemView itemView,int position,int dividerY){
-        LogUtil.d(TAG,"refreshView");
-        position=position%4;
-        if(position==0){
-            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY,position);
-        }else  if(position==1){
-            itemView.restoreView(SECOND_RECT_COLOR,SECOND_RECT_COLOR,dividerY,position);
-        }else  if(position==2){
-            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY,position);
-        }else if(position==3){
-            itemView.restoreView(SECOND_RECT_COLOR,SECOND_RECT_COLOR,dividerY,position);
+    public void refreshView(ItemView itemView,int index,int dividerY){
+        if(index%2==0){
+            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY);
         }else {
-            itemView.restoreView(FIRST_RECT_COLOR,FIRST_RECT_COLOR,dividerY,position);
+            itemView.restoreView(SECOND_RECT_COLOR,SECOND_RECT_COLOR,dividerY);
         }
     }
 

@@ -75,23 +75,19 @@ public class ItemView extends TextView{
 
     }
 
-    public void restoreView(int upRectColor,int downRectColor,int dividerY,int position){
+    public void restoreView(int upRectColor,int downRectColor,int dividerY){
         this.upRectColor=upRectColor;
         this.downRectColor=downRectColor;
         this.dividerY=dividerY;
-        refreshViewContent(position,dividerY);
         invalidate();
     }
 
-    public void refreshViewContent(int position,int dividerY){
-        if(dividerY>viewHeight*990/1000){
-            this.setText("");
+    public void restoreViewContent(int position){
+            this.setText(""+position);
             if(id==1){
                 this.setTextSize(30);
             }else {
                 this.setTextSize(20);
             }
-        }
-
     }
 }
