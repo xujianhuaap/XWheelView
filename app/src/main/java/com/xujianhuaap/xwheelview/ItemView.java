@@ -85,7 +85,7 @@ public class ItemView extends TextView{
 
     public void refreshViewContent(int position,int dividerY){
         if(dividerY>viewHeight*990/1000){
-            this.setText(""+position);
+            this.setText("");
             if(id==1){
                 this.setTextSize(30);
             }else {

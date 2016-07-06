@@ -166,7 +166,12 @@ public class XWheelView extends LinearLayout{
     }
     public void scroll(){
         int dividerY=(int)(totalLen%STANDARD_DIMEN);
+        boolean isNext=false;
         position = (int)(totalLen/STANDARD_DIMEN);
+        if(Math.abs(position-lastPosition)==1){
+            position=lastPosition;
+            isNext=true;
+        }
         for(int i=0;i<itemViews.size();i++){
             ItemView itemView=itemViews.get(i);
             if(itemViews.size()-1==i){
@@ -174,7 +179,12 @@ public class XWheelView extends LinearLayout{
             }else {
                 itemView.setTranslationY((dividerY));
             }
-            refreshView(itemView, position +i,dividerY);
+            if(isNext){
+                refreshView(itemView, position-1+i,dividerY);
+            }else {
+                refreshView(itemView, position +i,dividerY);
+            }
+
 
 
             LogUtil.d(TAG,"-------scroll i-----"+i);
